@@ -8,32 +8,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: configure stuff
-      uses: appleboy/ssh-action@master
+    - name: copy file via ssh password
+      uses: appleboy/scp-action@v0.1.7
       with:
-        HOST: ${{ vars.HOST }}
-        USERNAME: ${{ vars.USERNAME }}
-        PORT: ${{ vars.PORT }}
-        KEY: ${{ vars.SSHKEY }}
-        script: |
-          export TERM=xterm
-    
-    - name: Copy folder content recursively to remote
-      uses: garygrossgarten/github-action-scp@release
-      with:
-        local: .
-        remote: home/projeto
-        host: ${{ vars.HOST }}
-        username: ${{ vars.USERNAME }}
-        password: ${{ vars.PSW }}
-
-
-    - name: Copy folder content recursively to remote
-      uses: actions/checkout@v4
-      with:
-        local: .
-        remote: home/projeto2
         host: ${{ secrets.HOST }}
         username: ${{ secrets.SSH_USER }}
         password: ${{ secrets.PASSWORD }}
-        privateKey: ${{ secrets.PRIVATE_KEY}}
+        port: 22
+        source: "arquivos/foiBitch.txt"
+        target: home/projeto2
