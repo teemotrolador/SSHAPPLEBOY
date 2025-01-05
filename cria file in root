@@ -1,0 +1,19 @@
+name: Deployed
+
+on: [push]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        uses: appleboy/scp-action@master
+        with:
+          HOST: ${{ vars.HOST }}
+          USERNAME: ${{ vars.USERNAME }}
+          PORT: ${{ vars.PORT }}
+          KEY: ${{ vars.SSHKEY }}
+          source: "."
+          target: "~/home/rootzin/"
+          overwrite: true
+          timeout: 1m
