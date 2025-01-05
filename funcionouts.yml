@@ -1,0 +1,29 @@
+name: Deployed
+
+on: [push]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: copy files to server
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ vars.HOST }}
+          username: ${{ vars.USERNAME }}
+          password: ${{ vars.PSW }}
+          local-dir: "./"
+          server-dir: ~/testo/
+          security: loose
+          protocol: ftps
+                
+      - name: configure stuff
+        uses: appleboy/ssh-action@master
+        with:
+          HOST: ${{ vars.HOST }}
+          USERNAME: ${{ vars.USERNAME }}
+          PORT: ${{ vars.PORT }}
+          KEY: ${{ vars.SSHKEY }}
+          script: |
+            cd /home/github/ftp/upload/teemotrolador/testeAction
+            tar -xf ./myFile.tar
